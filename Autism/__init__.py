@@ -28,6 +28,7 @@ def create_app():
         'http://localhost:3000',
         'http://127.0.0.1:3000',
         'https://autoism-backend-production.up.railway.app',
+        'https://autoism-rdb9qtwo1-a6doiis-projects.vercel.app',
     ])
 
     @app.after_request
