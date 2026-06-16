@@ -1,0 +1,34 @@
+
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" style="padding-top:2rem; padding-bottom:2rem;">
+  <div class="report-header">
+    <div class="score-circle">{{ result.spark_score if result else '--' }}</div>
+    <h2>{{ case.child_name }} - Detailed Report</h2>
+  </div>
+
+  <div class="report-body">
+    {% if result %}
+    <div style="display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+      <div>
+        <p style="color: var(--text-muted);">Q-CHAT Score</p>
+        <h3>{{ result.spark_score }}/10</h3>
+      </div>
+      <div>
+        <p style="color: var(--text-muted);">Model Risk Probability</p>
+        <h3>{% if result.combined_risk is not none %}{{ '%.1f'|format(result.combined_risk * 100) }}%{% else %}N/A{% endif %}</h3>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;">
+      <p style="color: var(--text-muted);">Summary</p>
+      <p>{{ result.notes }}</p>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%; margin-top:2rem;" disabled>Download PDF Report (next step)</button>
+    {% else %}
+    <p>No report data yet. Run a test first.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

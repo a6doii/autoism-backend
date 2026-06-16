@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" style="max-width:800px; padding-top:2rem; padding-bottom:2rem;">
+  <div style="text-align:center; margin-bottom:3rem;">
+    <div style="width:min(120px,25vw); height:min(120px,25vw); background:#e0e7ff; color:var(--primary); border-radius:50%; display:inline-flex; justify-content:center; align-items:center; font-size:min(3rem,8vw); margin-bottom:1rem;">
+      {{ current_user.firstname[:1] }}{{ current_user.lastname[:1] }}
+    </div>
+    <h2 style="font-size:clamp(1.5rem, 5vw, 2rem);">My Profile</h2>
+    <p style="color:var(--text-muted); font-size:clamp(0.9rem, 3vw, 1rem);">Manage your account information</p>
+  </div>
+
+  <form class="form-container" method="POST" style="padding:clamp(1rem, 3vw, 2rem);">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" class="form-control" value="{{ user.firstname }} {{ user.lastname }}" disabled>
+    </div>
+    <div class="form-group-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" name="firstName" class="form-control" value="{{ user.firstname }}" required>
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" name="lastName" class="form-control" value="{{ user.lastname }}" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+    </div>
+    <div class="form-group-row">
+      <div class="form-group">
+        <label>Date of Birth</label>
+        <input type="date" name="dob" class="form-control" value="{{ user.dob }}">
+      </div>
+      <div class="form-group">
+        <label>Sex</label>
+        <select name="sex" class="form-control">
+          <option value="male" {% if user.sex == 'male' %}selected{% endif %}>Male</option>
+          <option value="female" {% if user.sex == 'female' %}selected{% endif %}>Female</option>
+          <option value="other" {% if user.sex == 'other' %}selected{% endif %}>Other</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary full-width" type="submit">Save Profile</button>
+  </form>
+</div>
+{% endblock %}

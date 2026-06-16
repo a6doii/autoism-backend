@@ -1,0 +1,29 @@
+
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+  <div class="section-title">
+    <h2>Results for {{ case.child_name }}</h2>
+    <p>All submitted assessments for this case.</p>
+  </div>
+
+  {% if results %}
+  <div class="cases-grid">
+    {% for r in results %}
+    <div class="case-card">
+      <h3>Q-CHAT Score</h3>
+      <div class="score-circle" style="margin:1rem auto; width:90px; height:90px; font-size:1.5rem; border-color:var(--primary); color:var(--primary);">{{ r.spark_score }}</div>
+      <p style="color:var(--text-muted);">{{ r.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+      <p style="margin-top:0.75rem;"><strong>{{ r.notes }}</strong></p>
+      <a href="{{ url_for('views.case_report', case_id=case.id) }}" class="btn btn-primary btn-small" style="margin-top:1rem;">Detailed Report</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3>No Results Yet</h3>
+    <p style="color: var(--text-muted);">Run a test first to generate results.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

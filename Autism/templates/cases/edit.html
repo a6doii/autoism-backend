@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+  <div class="form-container">
+    <h2 style="text-align:center; margin-bottom:2rem;">Edit Case</h2>
+    <form method="POST">
+      <div class="form-group">
+        <label>Child's Name</label>
+        <input type="text" class="form-control" name="child_name" value="{{ case.child_name }}" required>
+      </div>
+      <div class="form-group">
+        <label>Date of Birth</label>
+        <input type="date" class="form-control" name="child_dob" value="{{ case.child_dob }}" required>
+      </div>
+      <div class="form-group">
+        <label>Case Brief</label>
+        <textarea class="form-control" name="brief" rows="4" required>{{ case.brief }}</textarea>
+      </div>
+      <div style="display:flex; gap:1rem;">
+        <a href="{{ url_for('views.cases') }}" class="btn btn-secondary" style="flex:1;">Cancel</a>
+        <button type="submit" class="btn btn-primary" style="flex:1;">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

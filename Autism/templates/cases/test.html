@@ -1,0 +1,115 @@
+
+{% extends 'base.html' %}
+{% block body %}
+<div class="cases-page" style="min-height:calc(100vh - 300px);">
+  <div class="container" style="padding-top:2rem;">
+    <div class="form-container" style="max-width:980px;">
+      <h2 style="text-align:center;">Assessment for {{ case.child_name }}</h2>
+      <p style="text-align:center; color:var(--text-muted); margin-bottom:2rem;">
+        The questions below follow the original Q-CHAT-10 answer style (A–E).
+      </p>
+
+      <div class="section-title" style="margin:0 0 1rem 0;">
+        <h2>1) AI Image Analysis</h2>
+        <p>This frontend is ready. The CNN image upload will be connected next.</p>
+      </div>
+
+      <div class="upload-grid">
+        <label class="upload-box"><span>Photo 1</span></label>
+        <label class="upload-box"><span>Photo 2</span></label>
+        <label class="upload-box"><span>Photo 3</span></label>
+      </div>
+
+      <div class="section-title" style="margin:2rem 0 1rem 0;">
+        <h2>2) Q-CHAT-10 Questionnaire</h2>
+        <p>The app shows the same response structure as the PDF, then converts your choices into the model inputs automatically.</p>
+      </div>
+
+      <form method="POST">
+        {% for q in questions %}
+        <div class="question-card">
+          <strong>{{ q.id }}. {{ q.text }}</strong>
+          <div class="radio-group radio-grid">
+            {% for code, label in q.options %}
+              <label class="radio-option">
+                <input type="radio" name="A{{ q.id }}" value="{{ code }}" required
+                  {% if selected_answers.get('A' ~ q.id) == code %}checked{% endif %}>
+                <span><strong>{{ code }}</strong> — {{ label }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label>Child Sex</label>
+            <select name="child_sex" class="form-control" required>
+              <option value="" selected disabled>Select</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Ethnicity</label>
+            <select name="child_ethnicity" class="form-control" required>
+              <option value="" selected disabled>Select</option>
+              {% for e in ethnicities %}
+                <option value="{{ e }}">{{ e.title() }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label>Jaundice</label>
+            <select name="jaundice" class="form-control" required>
+              <option value="" selected disabled>Select</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Family Member with ASD</label>
+            <select name="family_asd" class="form-control" required>
+              <option value="" selected disabled>Select</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary full-width" type="submit">Submit Assessment</button>
+      </form>
+
+      {% if spark_score is not none %}
+      <div class="result-box" style="margin-top:1.5rem;">
+        <h3>Q-CHAT Score: {{ spark_score }}/10</h3>
+        <p>
+          Model prediction:
+          <strong>
+            {% if prediction == 1 %}
+              Autism likelihood detected
+            {% else %}
+              Low autism likelihood
+            {% endif %}
+          </strong>
+        </p>
+        <p>
+          Probability:
+          <strong>
+            {% if probability is not none %}
+              {{ '%.1f'|format(probability * 100) }}%
+            {% else %}
+              N/A
+            {% endif %}
+          </strong>
+        </p>
+        <a href="{{ url_for('views.case_results', case_id=case.id) }}" class="btn btn-primary" style="margin-top:1rem;">View Results</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

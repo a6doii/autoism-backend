@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="cases-page" style="min-height:calc(100vh - 300px);">
+  <div class="container" style="padding-top:2rem;">
+    <div style="display:flex; justify-content:space-between; margin-bottom:2rem; align-items:center; gap:1rem; flex-wrap:wrap;">
+      <h2>My Cases</h2>
+      <a href="#create-case" class="btn btn-primary">Create New Case</a>
+    </div>
+
+    <div class="form-container" id="create-case">
+      <h2 style="text-align:center; margin-bottom:2rem;">Create New Case</h2>
+      <form method="POST">
+        <div class="form-group">
+          <label>Child's Name</label>
+          <input type="text" class="form-control" name="child_name" required>
+        </div>
+        <div class="form-group">
+          <label>Date of Birth</label>
+          <input type="date" class="form-control" name="child_dob" required>
+        </div>
+        <div class="form-group">
+          <label>Case Brief</label>
+          <textarea class="form-control" name="brief" rows="4" placeholder="Short case summary..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Create Case</button>
+      </form>
+    </div>
+
+    {% if cases %}
+      <div class="cases-grid">
+        {% for c in cases %}
+        <div class="case-card">
+          <div class="case-avatar">{{ c.child_name[:1] }}</div>
+          <h3>{{ c.child_name }}</h3>
+          <p style="color:var(--text-muted);">{{ c.child_dob }}</p>
+          <p style="color:var(--text-muted); margin-top:0.75rem;">{{ c.brief[:90] }}{% if c.brief|length > 90 %}...{% endif %}</p>
+          <p style="margin-top:0.75rem;"><strong>{{ c.last_result_summary or 'No tests yet' }}</strong></p>
+
+          <div class="actions-wrap">
+            <a href="{{ url_for('views.test_case', case_id=c.id) }}" class="btn btn-primary btn-small">Test</a>
+            <a href="{{ url_for('views.case_results', case_id=c.id) }}" class="btn btn-secondary btn-small">Results</a>
+            <a href="{{ url_for('views.edit_case', case_id=c.id) }}" class="btn btn-secondary btn-small">Edit</a>
+            <form method="POST" action="{{ url_for('views.delete_case', case_id=c.id) }}">
+              <button type="submit" class="btn btn-danger btn-small">Delete</button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <h3>No Cases Yet</h3>
+        <p style="color: var(--text-muted);">Create your first case to start the autism assessment process.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

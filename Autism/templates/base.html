@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or 'Auto-Ism' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+<header class="navbar">
+  <div class="container">
+    <a href="{{ url_for('views.landing') }}" class="logo">
+      <div class="logo-icon">AI</div>
+      <span style="margin-left:10px;">Auto-Ism</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="{{ url_for('views.landing') }}" class="nav-item">Home</a>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('views.cases') }}" class="nav-item">Cases</a>
+      {% endif %}
+      <a href="{{ url_for('views.what_is_autism') }}" class="nav-item">What's Autism</a>
+      <a href="{{ url_for('views.about') }}" class="nav-item">About Us</a>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('views.profile') }}" class="nav-item">Profile</a>
+      {% endif %}
+    </nav>
+
+    <div class="nav-auth">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('auth.logout') }}" class="nav-item">Logout</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="nav-item">Login</a>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Register</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="container" style="margin-top:1rem;">
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+{% block body %}{% endblock %}
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <div class="logo" style="color:white; margin-bottom:1rem;">
+        <div class="logo-icon">AI</div>
+        <span style="margin-left:10px;">Auto-Ism</span>
+      </div>
+      <p>Supporting families with early autism detection using AI technology.</p>
+    </div>
+    <div class="footer-section">
+      <h3>Contact Us</h3>
+      <p>support@auto-ism.com</p>
+      <p>Faculty of Computers and Artificial Intelligence, Cairo University</p>
+    </div>
+    <div class="footer-section">
+      <h3>Team</h3>
+      <p>Developed by FCAI-CU students.</p>
+      <p>AI + Web + UX for early support.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Auto-Ism. All rights reserved.</p>
+  </div>
+</footer>
+</body>
+</html>

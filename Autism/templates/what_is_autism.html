@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" style="max-width:800px; padding:0 20px; margin:0 auto;">
+  <h1 style="text-align:center; margin:40px 0 20px 0; font-size:2.5rem;">Understanding Autism</h1>
+  <p style="text-align:center; font-size:1.1rem; margin-bottom:40px; color:#475569;">
+    Essential information for parents and caregivers.
+  </p>
+
+  <section style="margin-bottom:60px;">
+    <h2 style="font-size:1.8rem; margin-bottom:20px; color:#1e293b;">Frequently Asked Questions</h2>
+
+    <div class="accordion-item active">
+      <div class="accordion-header">Can autism be cured?</div>
+      <div class="accordion-body" style="display:block;">
+        Autism is a lifelong condition, not a disease that can be "cured". With appropriate support, therapy, and intervention,
+        individuals with autism can develop skills and lead fulfilling lives.
+      </div>
+    </div>
+
+    <div class="accordion-item active">
+      <div class="accordion-header">What causes autism?</div>
+      <div class="accordion-body" style="display:block;">
+        The exact cause is not fully understood, but research suggests a combination of genetic and environmental factors.
+      </div>
+    </div>
+
+    <div class="accordion-item active">
+      <div class="accordion-header">How is autism diagnosed?</div>
+      <div class="accordion-body" style="display:block;">
+        Diagnosis involves comprehensive evaluation by specialists. Screening tools like Auto-Ism can support earlier detection but do not replace medical diagnosis.
+      </div>
+    </div>
+
+    <div style="margin-top:40px; text-align:center; background:#eff6ff; padding:30px 20px; border-radius:12px;">
+      <h3 style="margin-bottom:15px; font-size:1.3rem; color:#1e293b;">Concerned about your child?</h3>
+      <a href="{{ url_for('views.cases') if current_user.is_authenticated else url_for('auth.register') }}"
+         style="display:inline-block; padding:10px 25px; background-color:#3b82f6; color:white; text-decoration:none; border-radius:6px; font-weight:500;">
+         Take the Free AI Assessment
+      </a>
+    </div>
+  </section>
+</div>
+{% endblock %}

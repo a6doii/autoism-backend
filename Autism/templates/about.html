@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block body %}
+<section class="about-hero">
+  <div class="container">
+    <h1>Auto-Ism</h1>
+    <p class="subtitle" style="max-width:600px; margin:0 auto;">
+      An AI-powered early autism detection platform built to help parents and doctors identify signs as early as possible.
+    </p>
+  </div>
+</section>
+
+<section class="container">
+  <div class="story-grid">
+    <div class="story-text">
+      <h2>Our Story</h2>
+      <p style="margin-top:1rem; color:#475569;">
+        We are a team of six passionate students from the Faculty of Computers and Artificial Intelligence at Cairo University (FCAI-CU).
+        During our studies, we realized that many families in Egypt and the Arab world discover autism signs too late.
+      </p>
+      <p style="margin-top:1rem; color:#475569;">
+        That's why we built <strong>Auto-Ism</strong>: a simple, accurate, and supportive tool that combines AI facial analysis with the SPARK questionnaire.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section style="background-color:#f8fafc; padding:4rem 0;">
+  <div class="container">
+    <div class="mission-grid">
+      <div class="mission-card">
+        <div class="icon-circle">M</div>
+        <h3>Our Mission</h3>
+        <p style="color:#64748B; margin-top:0.5rem;">
+          To empower every parent with a fast, free, and reliable way to screen for early signs of autism.
+        </p>
+      </div>
+      <div class="mission-card">
+        <div class="icon-circle">V</div>
+        <h3>Our Vision</h3>
+        <p style="color:#64748B; margin-top:0.5rem;">
+          A world where no child misses the golden window of early intervention because of delayed screening.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container" style="padding:4rem 0;">
+  <h2 style="text-align:center;">Meet the Team</h2>
+  <div class="team-container team-grid">
+    {% set team = [
+      ('AlHussein Abdo','Team Lead & Full-Stack','S7S.jpeg'),
+      ('Mostafa Allam','Front-End Engineer','Mostafa.jpeg'),
+      ('Ziad Ali','Full-Stack Developer','Ziad.jpeg'),
+      ('Ahmed Nader','Full-Stack Developer','Nader.jpeg'),
+      ('Mohamed Ahmed','ML Specialist','Mohamed.jpeg'),
+      ('Remon Maged','ML Specialist','Remon.jpeg')
+    ] %}
+    {% for name, role, img in team %}
+    <div class="card">
+      <img src="{{ url_for('static', filename='assets/' + img) }}" alt="{{ name }}">
+      <h4>{{ name }}</h4>
+      <p style="color:#64748B; font-size:0.9rem;">{{ role }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

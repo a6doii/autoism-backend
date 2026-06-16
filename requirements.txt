@@ -1,0 +1,12 @@
+flask
+flask_sqlalchemy
+flask_login
+flask_cors
+werkzeug
+numpy
+scikit-learn
+joblib
+pillow
+opencv-python
+tensorflow
+pytest
