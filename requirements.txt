@@ -9,4 +9,4 @@ joblib
 pillow
 opencv-python
 tensorflow
-pytest
+gunicorn
