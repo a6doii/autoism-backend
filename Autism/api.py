@@ -293,13 +293,6 @@ def validate_face_image():
     if not image_file:
         return jsonify({'valid': False, 'error': 'No image uploaded.'}), 400
 
-    if case_id:
-        case = Case.query.get(case_id)
-        if case and require_owner_or_admin(case):
-            age_months = calculate_age_months(case.child_dob)
-            if age_months is not None and age_months > MAX_CHILD_AGE_MONTHS:
-                return jsonify({'valid': False, 'error': age_restriction_error(age_months)}), 400
-
     try:
         _ = detect_and_crop_face(image_file)
         return jsonify({
@@ -328,6 +321,10 @@ def cases():
     brief = (data.get('brief') or '').strip()
     if not child_name or not child_dob or not brief:
         return jsonify({'error': 'Please fill all case fields.'}), 400
+
+    age_months = calculate_age_months(child_dob)
+    if age_months is not None and age_months > MAX_CHILD_AGE_MONTHS:
+        return jsonify({'error': age_restriction_error(age_months)}), 400
 
     new_case = Case(
         child_name=child_name,
@@ -369,10 +366,6 @@ def test_case(case_id):
     case = Case.query.get_or_404(case_id)
     if not require_owner_or_admin(case):
         return jsonify({'error': 'Forbidden'}), 403
-
-    age_months = calculate_age_months(case.child_dob)
-    if age_months is not None and age_months > MAX_CHILD_AGE_MONTHS:
-        return jsonify({'error': age_restriction_error(age_months)}), 400
 
     if request.content_type and 'multipart/form-data' in request.content_type:
         data = request.form.to_dict()
