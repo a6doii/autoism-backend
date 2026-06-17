@@ -21,13 +21,20 @@ FACE_MODEL_PATH = os.path.join(os.path.dirname(__file__), 'ml', 'densenet121_mod
 
 QCHAT_MODEL = None
 FACE_MODEL = None
+_models_loaded = False
 
 if os.path.exists(QCHAT_MODEL_PATH):
     with open(QCHAT_MODEL_PATH, 'rb') as f:
         QCHAT_MODEL = pickle.load(f)
 
-if os.path.exists(FACE_MODEL_PATH):
-    FACE_MODEL = load_model(FACE_MODEL_PATH)
+
+def _ensure_face_model():
+    global FACE_MODEL, _models_loaded
+    if _models_loaded:
+        return
+    _models_loaded = True
+    if os.path.exists(FACE_MODEL_PATH):
+        FACE_MODEL = load_model(FACE_MODEL_PATH)
 
 FACE_CASCADE = cv2.CascadeClassifier(
     cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
@@ -215,6 +222,7 @@ def preprocess_face_for_model(file_storage):
 
 
 def predict_face_risk(file_storage):
+    _ensure_face_model()
     if FACE_MODEL is None:
         return None
 

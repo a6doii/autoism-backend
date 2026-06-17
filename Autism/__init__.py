@@ -44,6 +44,10 @@ def create_app():
             response.headers['Cache-Control'] = 'no-store'
         return response
 
+    @app.route('/health')
+    def health():
+        return jsonify({'status': 'ok'})
+
     from .auth import auth
     from .api import api
     app.register_blueprint(auth, url_prefix='/api')
