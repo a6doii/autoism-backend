@@ -19,6 +19,13 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JSON_SORT_KEYS'] = False
 
+    # Required for cross-origin cookie auth (Vercel → Railway)
+    app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+    app.config['SESSION_COOKIE_SECURE'] = True
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
+    app.config['REMEMBER_COOKIE_SAMESITE'] = 'None'
+    app.config['REMEMBER_COOKIE_SECURE'] = True
+
     upload_dir = path.join(BASE_DIR, 'static', 'uploads')
     makedirs(upload_dir, exist_ok=True)
     app.config['UPLOAD_FOLDER'] = upload_dir
