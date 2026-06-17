@@ -1,4 +1,5 @@
 import re
+import os as _os
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -13,10 +14,17 @@ BASE_DIR = path.dirname(__file__)
 DB_PATH = path.join(BASE_DIR, 'database.db')
 
 
+def _db_uri():
+    url = _os.environ.get('DATABASE_URL', '')
+    if url.startswith('postgres://'):
+        url = url.replace('postgres://', 'postgresql://', 1)
+    return url or f'sqlite:///{DB_PATH}'
+
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'auto-ism-react-flask-secret'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = _db_uri()
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JSON_SORT_KEYS'] = False
 
