@@ -6,7 +6,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from .models import User
-from . import db
+from . import db, generate_token
 
 auth = Blueprint('auth', __name__)
 
@@ -66,7 +66,7 @@ def register():
     db.session.add(user)
     db.session.commit()
     login_user(user, remember=True)
-    return jsonify({'message': 'Account created successfully.', 'user': user_payload(user)})
+    return jsonify({'message': 'Account created successfully.', 'user': user_payload(user), 'token': generate_token(user.id)})
 
 
 @auth.route('/login', methods=['POST'])
@@ -78,7 +78,7 @@ def login():
     if not user or not check_password_hash(user.password, password):
         return jsonify({'error': 'Invalid email or password.'}), 401
     login_user(user, remember=True)
-    return jsonify({'message': 'Logged in successfully.', 'user': user_payload(user)})
+    return jsonify({'message': 'Logged in successfully.', 'user': user_payload(user), 'token': generate_token(user.id)})
 
 
 @auth.route('/logout', methods=['POST'])

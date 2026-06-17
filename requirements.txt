@@ -11,3 +11,4 @@ opencv-python-headless
 tensorflow
 gunicorn
 psycopg2-binary
+PyJWT

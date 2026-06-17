@@ -1,5 +1,7 @@
 import re
 import os as _os
+import jwt as _jwt
+from datetime import datetime, timedelta, timezone
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -12,6 +14,25 @@ from os import path, makedirs
 db = SQLAlchemy()
 BASE_DIR = path.dirname(__file__)
 DB_PATH = path.join(BASE_DIR, 'database.db')
+
+_JWT_SECRET = 'auto-ism-jwt-secret-key'
+_JWT_ALGO = 'HS256'
+
+
+def generate_token(user_id):
+    payload = {
+        'user_id': user_id,
+        'exp': datetime.now(timezone.utc) + timedelta(days=30),
+    }
+    return _jwt.encode(payload, _JWT_SECRET, algorithm=_JWT_ALGO)
+
+
+def verify_token(token):
+    try:
+        payload = _jwt.decode(token, _JWT_SECRET, algorithms=[_JWT_ALGO])
+        return payload.get('user_id')
+    except Exception:
+        return None
 
 
 def _db_uri():
@@ -28,7 +49,6 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JSON_SORT_KEYS'] = False
 
-    # Required for cross-origin cookie auth (Vercel → Railway)
     app.config['SESSION_COOKIE_SAMESITE'] = 'None'
     app.config['SESSION_COOKIE_SECURE'] = True
     app.config['SESSION_COOKIE_HTTPONLY'] = True
@@ -93,6 +113,16 @@ def create_app():
     def load_user(user_id):
         from .models import User
         return User.query.get(int(user_id))
+
+    @login_manager.request_loader
+    def load_user_from_request(req):
+        auth_header = req.headers.get('Authorization', '')
+        if auth_header.startswith('Bearer '):
+            user_id = verify_token(auth_header[7:])
+            if user_id:
+                from .models import User
+                return User.query.get(int(user_id))
+        return None
 
     @login_manager.unauthorized_handler
     def unauthorized():
