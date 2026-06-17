@@ -1,3 +1,4 @@
+import re
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -34,8 +35,8 @@ def create_app():
     CORS(app, supports_credentials=True, origins=[
         'http://localhost:3000',
         'http://127.0.0.1:3000',
-        'https://autoism-backend-production.up.railway.app',
-        'https://autoism-rdb9qtwo1-a6doiis-projects.vercel.app',
+        re.compile(r'https://.*\.vercel\.app'),
+        re.compile(r'https://.*\.railway\.app'),
     ])
 
     @app.after_request
