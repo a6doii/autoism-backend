@@ -7,6 +7,6 @@ numpy
 scikit-learn
 joblib
 pillow
-opencv-python
+opencv-python-headless
 tensorflow
 gunicorn
